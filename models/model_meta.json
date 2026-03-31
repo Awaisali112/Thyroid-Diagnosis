@@ -1,0 +1,116 @@
+{
+  "accuracy": 0.9860515021459227,
+  "cv_mean": 0.9871191620989936,
+  "cv_std": 0.006447488903410296,
+  "classes": [
+    "Hyperthyroid",
+    "Hypothyroid",
+    "Negative"
+  ],
+  "class_mapping": {
+    "0": "Hyperthyroid",
+    "1": "Hypothyroid",
+    "2": "Negative"
+  },
+  "feature_names": [
+    "age",
+    "sex",
+    "TSH",
+    "T3",
+    "TT4",
+    "T4U",
+    "FTI",
+    "pregnant"
+  ],
+  "feature_importance": {
+    "age": 0.021103904545614508,
+    "sex": 0.007163182853241214,
+    "TSH": 0.4923996287744695,
+    "T3": 0.16342402398799827,
+    "TT4": 0.14642129770835044,
+    "T4U": 0.027619390744619474,
+    "FTI": 0.1388128878120074,
+    "pregnant": 0.003055683573699156
+  },
+  "datasets": [
+    "hypothyroid.csv",
+    "thyroidDF.csv"
+  ],
+  "n_samples": 4659,
+  "knowledge_base": {
+    "Negative": {
+      "description": "Normal thyroid function (euthyroid) \u2014 no intervention needed",
+      "tsh_range": [
+        0.35,
+        4.5
+      ],
+      "t4_range": [
+        0.8,
+        1.8
+      ],
+      "t3_range": [
+        1.2,
+        3.1
+      ],
+      "symptoms": [],
+      "rules": [
+        "TSH 0.35\u20134.5 mIU/L with normal T3/TT4 \u2192 euthyroid"
+      ]
+    },
+    "Hypothyroid": {
+      "description": "Underactive thyroid \u2013 insufficient hormone production",
+      "tsh_range": [
+        4.5,
+        150
+      ],
+      "t4_range": [
+        0.0,
+        0.8
+      ],
+      "t3_range": [
+        0.0,
+        1.2
+      ],
+      "symptoms": [
+        "fatigue",
+        "weight_gain",
+        "cold_intolerance",
+        "dry_skin",
+        "hair_loss",
+        "depression",
+        "slow_heart_rate"
+      ],
+      "rules": [
+        "TSH > 4.5 mIU/L suggests hypothyroidism",
+        "Low T3/TT4 with elevated TSH confirms primary hypothyroidism"
+      ]
+    },
+    "Hyperthyroid": {
+      "description": "Overactive thyroid \u2013 excess hormone production",
+      "tsh_range": [
+        0.0,
+        0.35
+      ],
+      "t4_range": [
+        1.8,
+        6.0
+      ],
+      "t3_range": [
+        3.1,
+        10.0
+      ],
+      "symptoms": [
+        "weight_loss",
+        "heat_intolerance",
+        "tremors",
+        "rapid_heart_rate",
+        "anxiety",
+        "insomnia"
+      ],
+      "rules": [
+        "TSH < 0.35 mIU/L suggests hyperthyroidism",
+        "Elevated T3/TT4 with suppressed TSH confirms hyperthyroidism"
+      ]
+    }
+  }
+}

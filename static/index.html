@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThyroScan KBS – Thyroid Disorder Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c12;--surface:#101820;--surface2:#172030;--surface3:#1c2840;--border:#1e3050;--accent:#38bdf8;--green:#34d399;--red:#f87171;--amber:#fb923c;--purple:#a78bfa;--text:#e2eaf4;--muted:#6b8cae;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(56,189,248,.1),transparent 70%);top:-150px;left:-100px;animation:drift1 22s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,.08),transparent 70%);bottom:0;right:-80px;animation:drift2 28s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,60px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-80px)}}
+.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+header{padding:36px 0 0;text-align:center}
+.logo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:6px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:400;letter-spacing:-.02em;line-height:1.1;margin-bottom:10px;background:linear-gradient(135deg,#e2eaf4 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--muted);font-size:.95rem;max-width:600px;margin:0 auto 30px;font-weight:300}
+.stats-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.stat-chip{background:var(--surface);border:1px solid var(--border);padding:8px 18px;border-radius:999px;font-size:12px;display:flex;align-items:center;gap:6px}
+.stat-chip strong{color:var(--accent)}
+.main-grid{display:grid;grid-template-columns:420px 1fr;gap:22px;margin-bottom:28px}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.1rem;font-weight:400}
+.card-icon{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px;flex-shrink:0}
+.card-body{padding:20px}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between}
+.unit{color:var(--accent);font-size:9px}
+.field input,.field select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:14px;font-family:inherit;transition:border-color .2s,box-shadow .2s;outline:none;width:100%}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.range-hint{font-size:9px;color:var(--muted);margin-top:1px}
+/* Live preview */
+.preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:14px}
+.preview-box summary{cursor:pointer;color:var(--muted);font-weight:600;font-size:11px;list-style:none}
+.preview-box summary::before{content:'▶ '}
+.preview-box[open] summary::before{content:'▼ '}
+.preview-box table{width:100%;margin-top:8px;border-collapse:collapse}
+.preview-box td{padding:3px 6px;font-size:11px;color:var(--muted)}
+.preview-box td:first-child{color:var(--text);font-weight:500;width:40%}
+.flag-hi{color:var(--red)!important}.flag-lo{color:#60a5fa!important}.flag-ok{color:var(--green)!important}
+/* Pregnant toggle */
+.pregnant-row{display:flex;align-items:center;gap:12px;margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+.pregnant-row label{font-size:12px;font-weight:600;color:var(--muted);flex:1}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:var(--surface3);border-radius:999px;transition:.3s}
+.slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:.3s}
+input:checked + .slider{background:var(--accent)}
+input:checked + .slider::before{transform:translateX(20px);background:#fff}
+/* Button */
+.analyze-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#0284c7);border:none;border-radius:9px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;margin-top:16px}
+.analyze-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(56,189,248,.35)}
+.analyze-btn.loading{opacity:.7;cursor:default;transform:none!important;box-shadow:none!important}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:12px 16px;color:var(--red);font-size:12px;margin-top:10px;display:none}
+/* Result */
+#result-panel{display:none}
+.result-hero{border-radius:10px;padding:22px;margin-bottom:14px}
+.result-hero.Negative{background:linear-gradient(135deg,rgba(52,211,153,.18),rgba(16,185,129,.04));border:1px solid rgba(52,211,153,.4)}
+.result-hero.Hypothyroid{background:linear-gradient(135deg,rgba(96,165,250,.18),rgba(59,130,246,.04));border:1px solid rgba(96,165,250,.4)}
+.result-hero.Hyperthyroid{background:linear-gradient(135deg,rgba(251,146,60,.18),rgba(245,158,11,.04));border:1px solid rgba(251,146,60,.4)}
+.result-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.result-name{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;margin-bottom:4px}
+.result-desc{font-size:12px;color:var(--muted);margin-bottom:14px}
+.result-meta{display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700}
+.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+.badge-blue{background:rgba(56,189,248,.15);color:var(--accent);border:1px solid rgba(56,189,248,.35)}
+.badge-red{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.35)}
+/* Prob bars */
+.prob-list{display:flex;flex-direction:column;gap:12px}
+.prob-row-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.prob-bar-bg{height:7px;background:var(--surface3);border-radius:999px;overflow:hidden}
+.prob-bar-fill{height:100%;border-radius:999px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.pb-Negative{background:var(--green)}.pb-Hypothyroid{background:#60a5fa}.pb-Hyperthyroid{background:var(--amber)}
+/* Lab flags */
+.lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.lab-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.lab-item-name{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.lab-item-val{font-size:15px;font-weight:700;margin-bottom:3px}
+.lab-status{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block}
+.status-LOW{background:rgba(96,165,250,.2);color:#60a5fa}.status-HIGH{background:rgba(248,113,113,.2);color:var(--red)}.status-NORMAL{background:rgba(52,211,153,.2);color:var(--green)}
+.lab-range{font-size:9px;color:var(--muted);margin-top:2px}
+/* Rules & Recs */
+.rules-list,.rec-list{display:flex;flex-direction:column;gap:6px}
+.rule-item{background:var(--surface2);border-left:3px solid var(--amber);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px}
+.rule-ok{border-color:var(--green)}
+.rec-item{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;background:var(--surface2);border-radius:7px;font-size:12px}
+.rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px}
+/* KB */
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){.kb-grid{grid-template-columns:1fr}}
+.kb-card{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px;transition:border-color .2s,transform .15s}
+.kb-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.kb-card-name{font-weight:700;font-size:13px;margin-bottom:3px}
+.kb-card-desc{font-size:11px;color:var(--muted);margin-bottom:8px}
+.kb-ranges{font-size:10px;display:flex;flex-direction:column;gap:3px}
+.kb-ranges span{display:flex;justify-content:space-between}
+.kb-ranges .k{color:var(--muted)}.kb-ranges .v{color:#7dd3fc;font-weight:500}
+#placeholder-card{height:100%;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.full-card{grid-column:1/-1}
+.divider{height:1px;background:var(--border);margin:16px 0}
+footer{text-align:center;padding:28px 0;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<div class="container">
+
+<header>
+  <div class="logo-badge">🦋 Knowledge-Based System</div>
+  <h1>ThyroScan KBS</h1>
+  <p>AI-powered thyroid disorder analysis trained on two combined clinical datasets — detects Negative, Hypothyroid, and Hyperthyroid conditions</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-chip">🎯 Accuracy: <strong id="stat-acc">—</strong></div>
+  <div class="stat-chip">📊 Samples: <strong id="stat-n">—</strong></div>
+  <div class="stat-chip">🏥 Datasets: <strong>hypothyroid.csv + thyroidDF.csv</strong></div>
+  <div class="stat-chip">🧬 Classes: <strong>Negative · Hypothyroid · Hyperthyroid</strong></div>
+</div>
+
+<div class="main-grid">
+
+  <!-- INPUT -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(56,189,248,.15)">🧪</div>
+      <h2>Patient Data Entry</h2>
+    </div>
+    <div class="card-body">
+
+      <div class="sec-label">Thyroid Hormones</div>
+      <div class="field-grid">
+        <div class="field">
+          <label>TSH <span class="unit">mIU/L</span></label>
+          <input type="number" id="inp-TSH" step="0.01" min="0" value="2.10" oninput="sync()">
+          <div class="range-hint">Normal: 0.35–4.5</div>
+        </div>
+        <div class="field">
+          <label>T3 <span class="unit">nmol/L</span></label>
+          <input type="number" id="inp-T3" step="0.01" min="0" value="1.90" oninput="sync()">
+          <div class="range-hint">Normal: 1.2–3.1</div>
+        </div>
+        <div class="field">
+          <label>TT4 <span class="unit">ng/dL</span></label>
+          <input type="number" id="inp-TT4" step="0.1" min="0" value="104" oninput="sync()">
+          <div class="range-hint">Normal: 60–140</div>
+        </div>
+        <div class="field">
+          <label>T4U <span class="unit">ratio</span></label>
+          <input type="number" id="inp-T4U" step="0.01" min="0" value="0.96" oninput="sync()">
+          <div class="range-hint">Normal: 0.8–1.8</div>
+        </div>
+        <div class="field">
+          <label>FTI <span class="unit">index</span></label>
+          <input type="number" id="inp-FTI" step="0.1" min="0" value="109" oninput="sync()">
+          <div class="range-hint">Normal: 65–155</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Demographics</div>
+      <div class="field-grid">
+        <div class="field">
+          <label>Age <span class="unit">years</span></label>
+          <input type="number" id="inp-age" step="1" min="1" max="100" value="42" oninput="sync()">
+        </div>
+        <div class="field">
+          <label>Sex</label>
+          <select id="inp-sex" onchange="sync()">
+            <option value="0">Female</option>
+            <option value="1">Male</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pregnant-row">
+        <label>Pregnant?</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="inp-pregnant" onchange="sync()">
+          <span class="slider"></span>
+        </label>
+        <span id="pregnant-label" style="font-size:12px;color:var(--muted);min-width:28px">No</span>
+      </div>
+
+      <!-- Live preview -->
+      <details class="preview-box" id="prev-details">
+        <summary>Preview values being sent to model</summary>
+        <table id="prev-table"></table>
+      </details>
+
+      <div id="error-box" class="error-box"></div>
+
+      <button class="analyze-btn" id="analyze-btn" onclick="analyze()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Run Diagnosis
+      </button>
+      <div class="divider"></div>
+      <p style="font-size:10px;color:var(--muted);text-align:center">⚕️ Educational purposes only — not a substitute for clinical diagnosis.</p>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div>
+    <div id="placeholder-card" class="card">
+      <div style="font-size:64px;opacity:.1">🦋</div>
+      <p style="color:var(--muted);text-align:center;max-width:240px;font-size:13px">Enter patient values and click <strong style="color:var(--text)">Run Diagnosis</strong></p>
+    </div>
+    <div id="result-panel">
+      <div class="result-hero" id="result-hero">
+        <div class="result-label">Diagnosis Result</div>
+        <div class="result-name" id="result-name">—</div>
+        <div class="result-desc" id="result-desc"></div>
+        <div class="result-meta" id="result-meta"></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><div class="card-icon" style="background:rgba(167,139,248,.15)">📊</div><h2>Class Probabilities</h2></div>
+        <div class="card-body"><div class="prob-list" id="prob-list"></div></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><div class="card-icon" style="background:rgba(52,211,153,.15)">🔬</div><h2>Lab Result Flags</h2></div>
+        <div class="card-body"><div class="lab-grid" id="lab-grid"></div></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><div class="card-icon" style="background:rgba(251,191,36,.15)">⚡</div><h2>KBS Rules Triggered</h2></div>
+        <div class="card-body"><div class="rules-list" id="rules-list"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon" style="background:rgba(248,113,113,.15)">💊</div><h2>Clinical Recommendations</h2></div>
+        <div class="card-body"><div class="rec-list" id="rec-list"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KB -->
+<div class="card full-card" style="margin-bottom:40px">
+  <div class="card-header"><div class="card-icon" style="background:rgba(56,189,248,.15)">📚</div><h2>Knowledge Base</h2></div>
+  <div class="card-body"><div class="kb-grid" id="kb-grid"></div></div>
+</div>
+
+<footer>ThyroScan KBS · Python · Flask · scikit-learn · hypothyroid.csv + thyroidDF.csv · Educational Use Only</footer>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+// 8 features in exact training order
+const FEATURES = ['age','sex','TSH','T3','TT4','T4U','FTI','pregnant'];
+
+// State
+const S = {age:42, sex:0, TSH:2.10, T3:1.90, TT4:104, T4U:0.96, FTI:109, pregnant:0};
+
+const INP_MAP = {
+  'inp-age':'age','inp-sex':'sex',
+  'inp-TSH':'TSH','inp-T3':'T3','inp-TT4':'TT4','inp-T4U':'T4U','inp-FTI':'FTI'
+};
+
+const RANGES = {
+  TSH:{lo:0.35,hi:4.5,unit:'mIU/L'},
+  T3:{lo:1.2,hi:3.1,unit:'nmol/L'},
+  TT4:{lo:60,hi:140,unit:'ng/dL'},
+  T4U:{lo:0.8,hi:1.8,unit:'ratio'},
+  FTI:{lo:65,hi:155,unit:'index'}
+};
+
+function sync(){
+  for(const [id,k] of Object.entries(INP_MAP)){
+    const el=document.getElementById(id);
+    if(el) S[k]=parseFloat(el.value)||0;
+  }
+  const preg=document.getElementById('inp-pregnant');
+  S['pregnant']=preg.checked?1:0;
+  document.getElementById('pregnant-label').textContent=preg.checked?'Yes':'No';
+  renderPreview();
+}
+
+function renderPreview(){
+  let rows='';
+  for(const [k,{lo,hi,unit}] of Object.entries(RANGES)){
+    const v=S[k];
+    const cls=v<lo?'flag-lo':v>hi?'flag-hi':'flag-ok';
+    const sym=v<lo?'▼LOW':v>hi?'▲HIGH':'✓OK';
+    rows+=`<tr><td>${k}</td><td class="${cls}">${v} ${unit} — ${sym}</td></tr>`;
+  }
+  rows+=`<tr><td>Age/Sex/Pregnant</td><td>${S.age}yrs / ${S.sex===0?'F':'M'} / ${S.pregnant?'Yes':'No'}</td></tr>`;
+  document.getElementById('prev-table').innerHTML=rows;
+}
+
+function buildPayload(){
+  sync();
+  const p={};
+  for(const f of FEATURES) p[f]=S[f]!==undefined?S[f]:0;
+  return p;
+}
+
+async function analyze(){
+  const btn=document.getElementById('analyze-btn');
+  const err=document.getElementById('error-box');
+  err.style.display='none';
+  btn.innerHTML='<div class="spinner"></div> Analyzing…';
+  btn.classList.add('loading');
+  const payload=buildPayload();
+  console.log('Payload:',payload);
+  try{
+    const r=await fetch(API+'/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(d.error){err.textContent='⚠ '+d.error;err.style.display='block';return;}
+    renderResult(d,payload);
+  }catch(e){
+    err.textContent='⚠ Cannot connect to Flask API. Run: python app.py';
+    err.style.display='block';
+  }finally{
+    btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Run Diagnosis';
+    btn.classList.remove('loading');
+  }
+}
+
+function renderResult(d,payload){
+  document.getElementById('placeholder-card').style.display='none';
+  document.getElementById('result-panel').style.display='block';
+  const hero=document.getElementById('result-hero');
+  hero.className='result-hero '+d.prediction;
+  document.getElementById('result-name').textContent=d.prediction;
+  document.getElementById('result-desc').textContent=d.kb_info?.description||'';
+  const cc=d.confidence>=80?'badge-green':d.confidence>=60?'badge-blue':'badge-red';
+  document.getElementById('result-meta').innerHTML=`<span class="badge ${cc}">🎯 ${d.confidence}% confidence</span>`;
+
+  // Probs
+  const colorMap={'Negative':'pb-Negative','Hypothyroid':'pb-Hypothyroid','Hyperthyroid':'pb-Hyperthyroid'};
+  document.getElementById('prob-list').innerHTML=
+    Object.entries(d.probabilities).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+    <div>
+      <div class="prob-row-header"><span style="color:var(--muted)">${k}</span><span style="font-weight:700">${v}%</span></div>
+      <div class="prob-bar-bg"><div class="prob-bar-fill ${colorMap[k]||'pb-Negative'}" style="width:${v}%"></div></div>
+    </div>`).join('');
+
+  // Lab flags
+  document.getElementById('lab-grid').innerHTML=Object.entries(RANGES).map(([k,{lo,hi,unit}])=>{
+    const v=payload[k], st=v<lo?'LOW':v>hi?'HIGH':'NORMAL';
+    return `<div class="lab-item">
+      <div class="lab-item-name">${k}</div>
+      <div class="lab-item-val">${Number(v).toFixed(2)} <small style="font-size:9px;color:var(--muted)">${unit}</small></div>
+      <span class="lab-status status-${st}">${st}</span>
+      <div class="lab-range">${lo}–${hi} ${unit}</div>
+    </div>`;
+  }).join('');
+
+  // Rules
+  document.getElementById('rules-list').innerHTML=(d.rules_triggered||[]).map(r=>
+    `<div class="rule-item${r.startsWith('✅')?'rule-ok':''}">${r}</div>`).join('') ||
+    '<div class="rule-item rule-ok">✅ All parameters within normal limits</div>';
+
+  // Recs
+  document.getElementById('rec-list').innerHTML=(d.recommendations||[]).map(r=>
+    `<div class="rec-item"><div class="rec-dot"></div><span>${r}</span></div>`).join('');
+}
+
+async function init(){
+  try{
+    const d=await(await fetch(API+'/meta')).json();
+    document.getElementById('stat-acc').textContent=(d.accuracy*100).toFixed(1)+'%';
+    document.getElementById('stat-n').textContent=(d.n_samples||'—').toLocaleString();
+  }catch(e){document.getElementById('stat-acc').textContent='offline';}
+
+  try{
+    const kb=await(await fetch(API+'/kb')).json();
+    const g=document.getElementById('kb-grid');
+    const colors={'Negative':'var(--green)','Hypothyroid':'#60a5fa','Hyperthyroid':'var(--amber)'};
+    for(const[k,v] of Object.entries(kb)){
+      const c=colors[k]||'var(--accent)';
+      g.innerHTML+=`<div class="kb-card" style="border-top:3px solid ${c}">
+        <div class="kb-card-name">${k}</div>
+        <div class="kb-card-desc">${v.description}</div>
+        <div class="kb-ranges">
+          <span><span class="k">TSH</span><span class="v">${v.tsh_range[0]}–${v.tsh_range[1]} mIU/L</span></span>
+          <span><span class="k">T3</span><span class="v">${v.t3_range[0]}–${v.t3_range[1]} nmol/L</span></span>
+          <span><span class="k">T4</span><span class="v">${v.t4_range[0]}–${v.t4_range[1]} ng/dL</span></span>
+        </div></div>`;
+    }
+  }catch(e){
+    document.getElementById('kb-grid').innerHTML='<p style="color:var(--muted);font-size:12px;grid-column:1/-1">Start Flask API: <code style="color:var(--accent)">python app.py</code></p>';
+  }
+}
+
+sync();
+init();
+</script>
+</body>
+</html>
