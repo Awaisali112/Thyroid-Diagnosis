@@ -1,11 +1,11 @@
 """
 ThyroScan KBS – Flask Backend (3-class: Negative / Hypothyroid / Hyperthyroid)
 """
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib, json, os, numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), "static"))
 CORS(app)
 
 BASE   = os.path.dirname(__file__)
@@ -95,6 +95,16 @@ def get_recommendations(prediction):
         ],
     }
     return recs.get(prediction, [])
+
+
+@app.route("/favicon.svg")
+def favicon():
+    return send_from_directory(os.path.join(BASE, "static"), "favicon.svg", mimetype="image/svg+xml")
+
+
+@app.route("/")
+def index():
+    return send_from_directory(os.path.join(BASE, "static"), "index.html")
 
 
 @app.route("/api/health")

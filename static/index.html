@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ThyroScan KBS – Thyroid Disorder Analysis</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c12;--surface:#101820;--surface2:#172030;--surface3:#1c2840;--border:#1e3050;--accent:#38bdf8;--green:#34d399;--red:#f87171;--amber:#fb923c;--purple:#a78bfa;--text:#e2eaf4;--muted:#6b8cae;--radius:12px}
+:root{--bg:#f8f6ee;--surface:#ffffff;--surface2:#f0ece0;--surface3:#e8e2d0;--border:#d4c9a8;--accent:#4a7c3f;--green:#6a9e5a;--red:#b85c3a;--amber:#8a6e2f;--purple:#5a7a3a;--text:#2c3a1e;--muted:#7a8c6a;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
 .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(56,189,248,.1),transparent 70%);top:-150px;left:-100px;animation:drift1 22s ease-in-out infinite}
-.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,.08),transparent 70%);bottom:0;right:-80px;animation:drift2 28s ease-in-out infinite}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(74,124,63,.12),transparent 70%);top:-150px;left:-100px;animation:drift1 22s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(106,158,90,.1),transparent 70%);bottom:0;right:-80px;animation:drift2 28s ease-in-out infinite}
 @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,60px)}}
 @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-80px)}}
 .container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
 header{padding:36px 0 0;text-align:center}
-.logo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:6px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
-header h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:400;letter-spacing:-.02em;line-height:1.1;margin-bottom:10px;background:linear-gradient(135deg,#e2eaf4 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,124,63,.12);border:1px solid rgba(74,124,63,.35);padding:6px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:400;letter-spacing:-.02em;line-height:1.1;margin-bottom:10px;background:linear-gradient(135deg,#2c3a1e 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 header p{color:var(--muted);font-size:.95rem;max-width:600px;margin:0 auto 30px;font-weight:300}
 .stats-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
 .stat-chip{background:var(--surface);border:1px solid var(--border);padding:8px 18px;border-radius:999px;font-size:12px;display:flex;align-items:center;gap:6px}
@@ -34,7 +35,7 @@ header p{color:var(--muted);font-size:.95rem;max-width:600px;margin:0 auto 30px;
 .field label{font-size:11px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between}
 .unit{color:var(--accent);font-size:9px}
 .field input,.field select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:14px;font-family:inherit;transition:border-color .2s,box-shadow .2s;outline:none;width:100%}
-.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,124,63,.15)}
 .range-hint{font-size:9px;color:var(--muted);margin-top:1px}
 /* Live preview */
 .preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:14px}
@@ -55,44 +56,44 @@ header p{color:var(--muted);font-size:.95rem;max-width:600px;margin:0 auto 30px;
 input:checked + .slider{background:var(--accent)}
 input:checked + .slider::before{transform:translateX(20px);background:#fff}
 /* Button */
-.analyze-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#0284c7);border:none;border-radius:9px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;margin-top:16px}
-.analyze-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(56,189,248,.35)}
+.analyze-btn{width:100%;padding:13px;background:linear-gradient(135deg,#4a7c3f,#2c5a22);border:none;border-radius:9px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;margin-top:16px}
+.analyze-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,124,63,.35)}
 .analyze-btn.loading{opacity:.7;cursor:default;transform:none!important;box-shadow:none!important}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.error-box{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:12px 16px;color:var(--red);font-size:12px;margin-top:10px;display:none}
+.error-box{background:rgba(184,92,58,.1);border:1px solid rgba(184,92,58,.3);border-radius:8px;padding:12px 16px;color:var(--red);font-size:12px;margin-top:10px;display:none}
 /* Result */
 #result-panel{display:none}
 .result-hero{border-radius:10px;padding:22px;margin-bottom:14px}
-.result-hero.Negative{background:linear-gradient(135deg,rgba(52,211,153,.18),rgba(16,185,129,.04));border:1px solid rgba(52,211,153,.4)}
-.result-hero.Hypothyroid{background:linear-gradient(135deg,rgba(96,165,250,.18),rgba(59,130,246,.04));border:1px solid rgba(96,165,250,.4)}
-.result-hero.Hyperthyroid{background:linear-gradient(135deg,rgba(251,146,60,.18),rgba(245,158,11,.04));border:1px solid rgba(251,146,60,.4)}
+.result-hero.Negative{background:linear-gradient(135deg,rgba(106,158,90,.2),rgba(74,124,63,.05));border:1px solid rgba(74,124,63,.4)}
+.result-hero.Hypothyroid{background:linear-gradient(135deg,rgba(74,124,63,.2),rgba(44,90,34,.05));border:1px solid rgba(74,124,63,.5)}
+.result-hero.Hyperthyroid{background:linear-gradient(135deg,rgba(138,110,47,.2),rgba(184,92,58,.05));border:1px solid rgba(138,110,47,.4)}
 .result-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .result-name{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;margin-bottom:4px}
 .result-desc{font-size:12px;color:var(--muted);margin-bottom:14px}
 .result-meta{display:flex;gap:8px;flex-wrap:wrap}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700}
-.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.35)}
-.badge-blue{background:rgba(56,189,248,.15);color:var(--accent);border:1px solid rgba(56,189,248,.35)}
-.badge-red{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.35)}
+.badge-green{background:rgba(74,124,63,.15);color:var(--accent);border:1px solid rgba(74,124,63,.4)}
+.badge-blue{background:rgba(106,158,90,.15);color:#4a7c3f;border:1px solid rgba(106,158,90,.4)}
+.badge-red{background:rgba(184,92,58,.15);color:var(--red);border:1px solid rgba(184,92,58,.35)}
 /* Prob bars */
 .prob-list{display:flex;flex-direction:column;gap:12px}
 .prob-row-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
 .prob-bar-bg{height:7px;background:var(--surface3);border-radius:999px;overflow:hidden}
 .prob-bar-fill{height:100%;border-radius:999px;transition:width 1s cubic-bezier(.22,1,.36,1)}
-.pb-Negative{background:var(--green)}.pb-Hypothyroid{background:#60a5fa}.pb-Hyperthyroid{background:var(--amber)}
+.pb-Negative{background:var(--green)}.pb-Hypothyroid{background:#4a7c3f}.pb-Hyperthyroid{background:var(--amber)}
 /* Lab flags */
 .lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
 .lab-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
 .lab-item-name{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
 .lab-item-val{font-size:15px;font-weight:700;margin-bottom:3px}
 .lab-status{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block}
-.status-LOW{background:rgba(96,165,250,.2);color:#60a5fa}.status-HIGH{background:rgba(248,113,113,.2);color:var(--red)}.status-NORMAL{background:rgba(52,211,153,.2);color:var(--green)}
+.status-LOW{background:rgba(74,124,63,.15);color:#4a7c3f}.status-HIGH{background:rgba(184,92,58,.15);color:var(--red)}.status-NORMAL{background:rgba(106,158,90,.2);color:#2c5a22}
 .lab-range{font-size:9px;color:var(--muted);margin-top:2px}
 /* Rules & Recs */
 .rules-list,.rec-list{display:flex;flex-direction:column;gap:6px}
 .rule-item{background:var(--surface2);border-left:3px solid var(--amber);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px}
-.rule-ok{border-color:var(--green)}
+.rule-ok{border-color:var(--accent)}
 .rec-item{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;background:var(--surface2);border-radius:7px;font-size:12px}
 .rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px}
 /* KB */
@@ -104,7 +105,7 @@ input:checked + .slider::before{transform:translateX(20px);background:#fff}
 .kb-card-desc{font-size:11px;color:var(--muted);margin-bottom:8px}
 .kb-ranges{font-size:10px;display:flex;flex-direction:column;gap:3px}
 .kb-ranges span{display:flex;justify-content:space-between}
-.kb-ranges .k{color:var(--muted)}.kb-ranges .v{color:#7dd3fc;font-weight:500}
+.kb-ranges .k{color:var(--muted)}.kb-ranges .v{color:#4a7c3f;font-weight:500}
 #placeholder-card{height:100%;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
 .full-card{grid-column:1/-1}
 .divider{height:1px;background:var(--border);margin:16px 0}
@@ -133,7 +134,7 @@ footer{text-align:center;padding:28px 0;color:var(--muted);font-size:11px;border
   <!-- INPUT -->
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:rgba(56,189,248,.15)">🧪</div>
+      <div class="card-icon" style="background:rgba(74,124,63,.15)">🧪</div>
       <h2>Patient Data Entry</h2>
     </div>
     <div class="card-body">
@@ -222,19 +223,19 @@ footer{text-align:center;padding:28px 0;color:var(--muted);font-size:11px;border
         <div class="result-meta" id="result-meta"></div>
       </div>
       <div class="card" style="margin-bottom:14px">
-        <div class="card-header"><div class="card-icon" style="background:rgba(167,139,248,.15)">📊</div><h2>Class Probabilities</h2></div>
+        <div class="card-header"><div class="card-icon" style="background:rgba(106,158,90,.15)">📊</div><h2>Class Probabilities</h2></div>
         <div class="card-body"><div class="prob-list" id="prob-list"></div></div>
       </div>
       <div class="card" style="margin-bottom:14px">
-        <div class="card-header"><div class="card-icon" style="background:rgba(52,211,153,.15)">🔬</div><h2>Lab Result Flags</h2></div>
+        <div class="card-header"><div class="card-icon" style="background:rgba(74,124,63,.15)">🔬</div><h2>Lab Result Flags</h2></div>
         <div class="card-body"><div class="lab-grid" id="lab-grid"></div></div>
       </div>
       <div class="card" style="margin-bottom:14px">
-        <div class="card-header"><div class="card-icon" style="background:rgba(251,191,36,.15)">⚡</div><h2>KBS Rules Triggered</h2></div>
+        <div class="card-header"><div class="card-icon" style="background:rgba(138,110,47,.15)">⚡</div><h2>KBS Rules Triggered</h2></div>
         <div class="card-body"><div class="rules-list" id="rules-list"></div></div>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-icon" style="background:rgba(248,113,113,.15)">💊</div><h2>Clinical Recommendations</h2></div>
+        <div class="card-header"><div class="card-icon" style="background:rgba(184,92,58,.15)">💊</div><h2>Clinical Recommendations</h2></div>
         <div class="card-body"><div class="rec-list" id="rec-list"></div></div>
       </div>
     </div>
@@ -243,7 +244,7 @@ footer{text-align:center;padding:28px 0;color:var(--muted);font-size:11px;border
 
 <!-- KB -->
 <div class="card full-card" style="margin-bottom:40px">
-  <div class="card-header"><div class="card-icon" style="background:rgba(56,189,248,.15)">📚</div><h2>Knowledge Base</h2></div>
+  <div class="card-header"><div class="card-icon" style="background:rgba(74,124,63,.15)">📚</div><h2>Knowledge Base</h2></div>
   <div class="card-body"><div class="kb-grid" id="kb-grid"></div></div>
 </div>
 
@@ -251,7 +252,7 @@ footer{text-align:center;padding:28px 0;color:var(--muted);font-size:11px;border
 </div>
 
 <script>
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 // 8 features in exact training order
 const FEATURES = ['age','sex','TSH','T3','TT4','T4U','FTI','pregnant'];
@@ -356,7 +357,7 @@ function renderResult(d,payload){
 
   // Rules
   document.getElementById('rules-list').innerHTML=(d.rules_triggered||[]).map(r=>
-    `<div class="rule-item${r.startsWith('✅')?'rule-ok':''}">${r}</div>`).join('') ||
+    `<div class="rule-item ${r.startsWith('✅') ? 'rule-ok' : ''}">${r}</div>`).join('') ||
     '<div class="rule-item rule-ok">✅ All parameters within normal limits</div>';
 
   // Recs
@@ -374,7 +375,7 @@ async function init(){
   try{
     const kb=await(await fetch(API+'/kb')).json();
     const g=document.getElementById('kb-grid');
-    const colors={'Negative':'var(--green)','Hypothyroid':'#60a5fa','Hyperthyroid':'var(--amber)'};
+    const colors={'Negative':'var(--green)','Hypothyroid':'var(--accent)','Hyperthyroid':'var(--amber)'};
     for(const[k,v] of Object.entries(kb)){
       const c=colors[k]||'var(--accent)';
       g.innerHTML+=`<div class="kb-card" style="border-top:3px solid ${c}">
